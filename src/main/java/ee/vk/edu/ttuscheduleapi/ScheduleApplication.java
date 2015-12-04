@@ -1,4 +1,4 @@
-package rest;
+package ee.vk.edu.ttuscheduleapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

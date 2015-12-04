@@ -1,4 +1,4 @@
-package rest.model;
+package ee.vk.edu.ttuscheduleapi.model;
 
 import java.io.Serializable;
 import java.util.Date;

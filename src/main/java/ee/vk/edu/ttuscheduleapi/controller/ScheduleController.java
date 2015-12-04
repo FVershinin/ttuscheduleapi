@@ -1,15 +1,14 @@
-package rest.controller;
+package ee.vk.edu.ttuscheduleapi.controller;
 
 import com.google.common.collect.Lists;
+import ee.vk.edu.ttuscheduleapi.model.Subject;
 import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import rest.client.TTUSchedule;
-import rest.model.Subject;
+import ee.vk.edu.ttuscheduleapi.client.TTUSchedule;
 
 import java.io.IOException;
 import java.text.ParseException;

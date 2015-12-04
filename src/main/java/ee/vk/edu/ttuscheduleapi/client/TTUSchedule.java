@@ -1,18 +1,16 @@
-package rest.client;
+package ee.vk.edu.ttuscheduleapi.client;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import ee.vk.edu.ttuscheduleapi.model.Subject;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Property;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Repository;
-import rest.model.Subject;
-import sun.util.calendar.ZoneInfo;
 
 import java.io.IOException;
 import java.net.URL;
