@@ -1,7 +1,7 @@
 package ee.vk.edu.ttuscheduleapi.controller;
 
-import com.google.common.collect.Lists;
-import ee.vk.edu.ttuscheduleapi.model.Subject;
+import com.google.common.collect.Maps;
+import ee.vk.edu.ttuscheduleapi.model.Event;
 import net.fortuna.ical4j.data.ParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/schedule")
+@RequestMapping("/api/v1/schedule")
 public class ScheduleController {
 
     @Autowired
@@ -24,7 +24,10 @@ public class ScheduleController {
 
 
     @RequestMapping
-    public ResponseEntity<Map<String, List<Subject>>> Schedules(@RequestParam(value="groups", required=true) String[] group) throws IOException, ParserException, ParseException {
-        return new ResponseEntity<>(ttuSchedule.getCalendars(Lists.newArrayList(group)), HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> Schedules(@RequestParam(value="group", required=true) String group) throws IOException, ParserException, ParseException {
+        Map<String, Object> eventMap = Maps.newLinkedHashMap();
+        eventMap.put("group", group);
+        eventMap.put("events", ttuSchedule.getEvents(group));
+        return new ResponseEntity<>(eventMap, HttpStatus.OK);
     }
 }

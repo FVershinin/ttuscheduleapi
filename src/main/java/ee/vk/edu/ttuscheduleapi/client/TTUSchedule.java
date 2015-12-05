@@ -1,10 +1,9 @@
 package ee.vk.edu.ttuscheduleapi.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import ee.vk.edu.ttuscheduleapi.model.Group;
-import ee.vk.edu.ttuscheduleapi.model.Subject;
+import ee.vk.edu.ttuscheduleapi.model.Event;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Component;
@@ -34,33 +33,29 @@ public class TTUSchedule {
         groupsMap = getGroupsMap();
     }
 
-    public Map<String, List<Subject>> getCalendars(List<String> groups) throws IOException, ParserException, ParseException {
-        Map<String, List<Subject>> calendarMap = Maps.newHashMap();
+    public List<Event> getEvents(String group_name) throws IOException, ParserException, ParseException {
+        List<Event> events = Lists.newLinkedList();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
         dateFormat.setTimeZone(TimeZone.getTimeZone("EET"));
-        for (String group_name : groups){
-            Group group = groupsMap.get(group_name.toUpperCase());
-            URL url = new URL(String.format(CALENDAR_URL, group.getType(), group.getId()));
-            CalendarBuilder calendarBuilder = new CalendarBuilder();
-            ComponentList components = calendarBuilder.build(url.openConnection().getInputStream()).getComponents(Component.VEVENT);
-            List<Subject> subjects = Lists.newArrayList();
-            for (Object object : components) {
-                Component component = (Component) object;
-                Subject subject = new Subject();
-                subject.setDateStart(dateFormat.parse(component.getProperty(Property.DTSTART).getValue()));
-                subject.setDateEnd(dateFormat.parse(component.getProperty(Property.DTEND).getValue()));
-                subject.setDescription(component.getProperty(Property.DESCRIPTION).getValue());
-                subject.setLocation(component.getProperty(Property.LOCATION).getValue());
-                subject.setSummary(component.getProperty(Property.SUMMARY).getValue());
-                subjects.add(subject);
-            }
-            calendarMap.put(group_name.toUpperCase(), subjects);
+        Group group = groupsMap.get(group_name.toUpperCase());
+        URL url = new URL(String.format(CALENDAR_URL, group.getType(), group.getId()));
+        CalendarBuilder calendarBuilder = new CalendarBuilder();
+        ComponentList components = calendarBuilder.build(url.openConnection().getInputStream()).getComponents(Component.VEVENT);
+        for (Object object : components) {
+            Component component = (Component) object;
+            Event event = new Event();
+            event.setDateStart(dateFormat.parse(component.getProperty(Property.DTSTART).getValue()));
+            event.setDateEnd(dateFormat.parse(component.getProperty(Property.DTEND).getValue()));
+            event.setDescription(component.getProperty(Property.DESCRIPTION).getValue());
+            event.setLocation(component.getProperty(Property.LOCATION).getValue());
+            event.setSummary(component.getProperty(Property.SUMMARY).getValue());
+            events.add(event);
         }
-        return calendarMap;
+        return events;
     }
 
-    public Set<String> getAllGroups(){
-        return groupsMap.keySet();
+    public List<Group> getAllGroups() {
+        return Lists.newLinkedList(groupsMap.values());
     }
 
     private Map<String, Group> getGroupsMap() throws IOException {
@@ -69,7 +64,7 @@ public class TTUSchedule {
         for (int i = 1; i <= 2; i++) {
             for (Element span : Jsoup.connect(String.format(GROUPS_URL, i)).timeout(15000).get().select("span").select("span:has(a)")) {
                 Matcher matcher = pattern.matcher(span.attr("onclick"));
-                if (matcher.find()){
+                if (matcher.find()) {
                     Group group = new Group(Long.valueOf(matcher.group(1)), span.select("a").html(), i);
                     map.put(group.getName(), group);
                 }

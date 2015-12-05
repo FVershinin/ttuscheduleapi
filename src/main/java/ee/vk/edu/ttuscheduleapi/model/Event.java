@@ -3,7 +3,7 @@ package ee.vk.edu.ttuscheduleapi.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Subject implements Serializable {
+public class Event implements Serializable {
     private Long id;
     private Date dateStart;
     private Date dateEnd;
