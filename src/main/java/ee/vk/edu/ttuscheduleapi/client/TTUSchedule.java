@@ -54,8 +54,8 @@ public class TTUSchedule {
         return events;
     }
 
-    public List<Group> getAllGroups() {
-        return Lists.newLinkedList(groupsMap.values());
+    public List<String> getAllGroups() {
+        return Lists.newLinkedList(groupsMap.keySet());
     }
 
     private Map<String, Group> getGroupsMap() throws IOException {
