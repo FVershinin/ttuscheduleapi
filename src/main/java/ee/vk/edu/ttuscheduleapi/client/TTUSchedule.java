@@ -53,7 +53,7 @@ public class TTUSchedule {
                 event.setLocation(matcher.group(1));
             else
                 event.setLocation(component.getProperty(Property.LOCATION).getValue());
-            event.setSummary(component.getProperty(Property.SUMMARY).getValue());
+            event.setSummary("Privet ja patla4!");
             events.add(event);
         }
         return events;
