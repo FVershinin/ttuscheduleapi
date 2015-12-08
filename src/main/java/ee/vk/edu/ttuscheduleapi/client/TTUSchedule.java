@@ -34,7 +34,7 @@ public class TTUSchedule {
     }
 
     public List<Event> getEvents(String group_name) throws IOException, ParserException, ParseException {
-        Pattern pattern = Pattern.compile("([\\w\\s]+)kommentaar");
+        Pattern pattern = Pattern.compile("(ruumid: [\\w\\s]+)kommentaar");
         List<Event> events = Lists.newLinkedList();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
         dateFormat.setTimeZone(TimeZone.getTimeZone("EET"));
@@ -53,7 +53,7 @@ public class TTUSchedule {
                 event.setLocation(matcher.group(1));
             else
                 event.setLocation(component.getProperty(Property.LOCATION).getValue());
-            event.setSummary("Privet ja patla4!");
+            event.setSummary(component.getProperty(Property.SUMMARY).getValue());
             events.add(event);
         }
         return events;
