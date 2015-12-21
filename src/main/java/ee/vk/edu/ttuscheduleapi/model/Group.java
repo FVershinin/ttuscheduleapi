@@ -1,8 +1,12 @@
 package ee.vk.edu.ttuscheduleapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Group {
     private Long id;
     private String name;
+
+    @JsonIgnore
     private Integer type;
 
     public Group() {

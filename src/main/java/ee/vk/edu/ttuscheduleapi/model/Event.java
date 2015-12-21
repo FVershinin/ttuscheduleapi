@@ -1,9 +1,12 @@
 package ee.vk.edu.ttuscheduleapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class Event implements Serializable {
+    @JsonIgnore
     private Long id;
     private Date dateStart;
     private Date dateEnd;

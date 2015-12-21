@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +38,6 @@ public class TTUSchedule {
         Pattern pattern = Pattern.compile("(ruumid: [\\w\\s]+)kommentaar");
         List<Event> events = Lists.newLinkedList();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("EET"));
         Group group = groupsMap.get(group_name.toUpperCase());
         URL url = new URL(String.format(CALENDAR_URL, group.getType(), group.getId()));
         CalendarBuilder calendarBuilder = new CalendarBuilder();
@@ -59,8 +59,8 @@ public class TTUSchedule {
         return events;
     }
 
-    public List<String> getAllGroups() {
-        return Lists.newLinkedList(groupsMap.keySet());
+    public List<Group> getAllGroups() {
+        return Lists.newLinkedList(groupsMap.values());
     }
 
     private Map<String, Group> getGroupsMap() throws IOException {
