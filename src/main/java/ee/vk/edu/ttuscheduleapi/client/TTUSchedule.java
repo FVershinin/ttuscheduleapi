@@ -2,8 +2,8 @@ package ee.vk.edu.ttuscheduleapi.client;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import ee.vk.edu.ttuscheduleapi.model.Group;
 import ee.vk.edu.ttuscheduleapi.model.Event;
+import ee.vk.edu.ttuscheduleapi.model.Group;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Component;
@@ -17,8 +17,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,10 +36,11 @@ public class TTUSchedule {
         groupsMap = getGroupsMap();
     }
 
-    public List<Event> getEvents(String group_name) throws IOException, ParserException, ParseException {
+    public List<Event> find(String group_name) throws IOException, ParserException, ParseException {
         Pattern pattern = Pattern.compile("(ruumid: [\\w\\s]+)kommentaar");
         List<Event> events = Lists.newLinkedList();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Group group = groupsMap.get(group_name.toUpperCase());
         URL url = new URL(String.format(CALENDAR_URL, group.getType(), group.getId()));
         CalendarBuilder calendarBuilder = new CalendarBuilder();
@@ -59,8 +62,8 @@ public class TTUSchedule {
         return events;
     }
 
-    public List<Group> getAllGroups() {
-        return Lists.newLinkedList(groupsMap.values());
+    public List<String> findAll() {
+        return Lists.newLinkedList(groupsMap.keySet());
     }
 
     private Map<String, Group> getGroupsMap() throws IOException {
